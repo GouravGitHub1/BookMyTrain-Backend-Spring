@@ -6,7 +6,9 @@
     "_id" : ObjectId("617a7ab13c66ffd6f8c424ac"),
     "seatNumber" : "A1",
     "status" : "booked",
-    "bookedUser" : "Gourav Ag"
+    "bookedUser" : "Gourav Ag",
+    "pnr": "",
+    "bookingDate": ""
 })
 6. show collections 
 7. db.seatBooking.find()

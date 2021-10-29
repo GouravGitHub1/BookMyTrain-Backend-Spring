@@ -68,7 +68,7 @@ public class BookingServiceImpl implements BookingService {
 			
 		}
 		
-		rowRemainingSeats[rowIndex] = 7 - tempRowSum;
+		rowRemainingSeats[rowIndex] = 3 - tempRowSum;
 		
 //		System.out.println("totalRemainingSeats "+totalRemainingSeats);
 		if (totalRemainingSeats<requiredSeats) {
@@ -93,7 +93,7 @@ public class BookingServiceImpl implements BookingService {
 						rowWithMaxSeats = j;
 					}
 				}
-				
+
 				if (minDistanceRow == -1) {
 					minDistanceRow = rowWithMaxSeats;
 				}
@@ -123,15 +123,21 @@ public class BookingServiceImpl implements BookingService {
 			int endSeat = allocatedSeats.get(allocatedSeats.size()-1);
 //			System.out.println(startSeat +" "+endSeat);
 			
+//			for (int j : seatMatrix) {
+//				System.out.print(j);
+//			}
+//			System.out.println();
 			int distance = 1;
 			while (remainingSeats>0) {
 				if (startSeat - distance > 0 && seatMatrix[startSeat - distance]==0) {
+//					System.out.println(startSeat - distance + " " +seatMatrix[startSeat - distance]);
 					allocatedSeats.add(startSeat - distance);
 					remainingSeats--;
 				}
 				if (remainingSeats<=0)
 					break;
-				if (endSeat + distance < 81 && seatMatrix[startSeat - distance]==0) {
+				if (endSeat + distance < 81 && seatMatrix[endSeat + distance]==0) {
+//					System.out.println(endSeat + distance + " " +seatMatrix[endSeat + distance]);
 					allocatedSeats.add(endSeat + distance);
 					remainingSeats--;
 				}
