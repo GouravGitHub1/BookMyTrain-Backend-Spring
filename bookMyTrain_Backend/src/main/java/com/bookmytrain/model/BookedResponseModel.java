@@ -5,13 +5,13 @@ import java.util.List;
 public class BookedResponseModel {
 	private String pnrNumber;
 	private List<Integer> allocatedSeats;
-	private List<seatBookingModel> seatMatrix;
+	private List<SeatBookingModel> seatMatrix;
 
 	public BookedResponseModel() {
 		super();
 	}
 
-	public BookedResponseModel(String pnrNumber, List<Integer> allocatedSeats, List<seatBookingModel> seatMatrix) {
+	public BookedResponseModel(String pnrNumber, List<Integer> allocatedSeats, List<SeatBookingModel> seatMatrix) {
 		super();
 		this.pnrNumber = pnrNumber;
 		this.allocatedSeats = allocatedSeats;
@@ -40,11 +40,11 @@ public class BookedResponseModel {
 		this.allocatedSeats = allocatedSeats;
 	}
 
-	public List<seatBookingModel> getSeatMatrix() {
+	public List<SeatBookingModel> getSeatMatrix() {
 		return seatMatrix;
 	}
 
-	public void setSeatMatrix(List<seatBookingModel> seatMatrix) {
+	public void setSeatMatrix(List<SeatBookingModel> seatMatrix) {
 		this.seatMatrix = seatMatrix;
 	}
 }

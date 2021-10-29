@@ -5,15 +5,18 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.bookmytrain.model.BookedResponseModel;
+import com.bookmytrain.model.BookingException;
 import com.bookmytrain.model.BookingModel;
-import com.bookmytrain.model.seatBookingModel;
+import com.bookmytrain.model.SeatBookingModel;
 
 @Service
 public interface BookingService {
 
-	public List<seatBookingModel> fetchAllBookingData();
+	public List<SeatBookingModel> fetchAllBookingData();
 	
-	public BookedResponseModel bookSeat(BookingModel bookingModel);
+	public List<SeatBookingModel> fetchBookingDataByPnr(String pnr);
+	
+	public BookedResponseModel bookSeat(BookingModel bookingModel) throws BookingException;
 
 	
 }
