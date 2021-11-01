@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.bookmytrain.model.BookedResponseModel;
 import com.bookmytrain.model.SeatBookingModel;
+import com.bookmytrain.model.SeatsConfigModel;
 
 @Repository
 public class BookingRepositoryTemplate {
@@ -39,6 +40,11 @@ public class BookingRepositoryTemplate {
 		query.addCriteria(Criteria.where("seatNumber").in(seatNumber));
 
 		return mongotemplate.find(query, SeatBookingModel.class);
+	}
+	
+	public SeatsConfigModel fetchConfigs() {
+		List<SeatsConfigModel> seatsConfigModels = mongotemplate.findAll(SeatsConfigModel.class);
+		return seatsConfigModels.get(0);
 	}
 
 }

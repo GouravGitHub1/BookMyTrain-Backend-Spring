@@ -10,6 +10,7 @@ import com.bookmytrain.model.BookedResponseModel;
 import com.bookmytrain.model.BookingException;
 import com.bookmytrain.model.BookingModel;
 import com.bookmytrain.model.SeatBookingModel;
+import com.bookmytrain.model.SeatsConfigModel;
 import com.bookmytrain.repository.BookingRepository;
 import com.bookmytrain.repository.BookingRepositoryTemplate;
 
@@ -31,9 +32,33 @@ public class BookingServiceImpl implements BookingService {
 	}
 	
 	public BookedResponseModel bookSeat(BookingModel bookingModel) throws BookingException{
+		int seatsInArow = 7;
+		int seatsInLastRow = 3;
+		int noOfrows = 12;
+		int totalSeats = 80;
+		
+		SeatsConfigModel config = bookingRepositoryTemplate.fetchConfigs();
+		System.out.println(config);
+		seatsInArow = config.getSeatsInArow();
+		System.out.println(seatsInArow);
+				
 		BookedResponseModel response = new BookedResponseModel();
 		List<SeatBookingModel> seatsData = bookingRepository.findAll();
 		int requiredSeats = bookingModel.getSeatsRequired();
+		
+		totalSeats = seatsData.size();
+		if(totalSeats%seatsInArow==0) {
+			noOfrows = totalSeats / seatsInArow;
+		}
+		else{
+			noOfrows = (totalSeats / seatsInArow) + 1;
+			seatsInLastRow = totalSeats - (noOfrows - 1)*seatsInArow;
+		}
+		System.out.println(noOfrows);
+		System.out.println(seatsInLastRow);
+
+
+		
 				
 		int[] seatMatrix = new int[seatsData.size() + 1];
 		
@@ -49,7 +74,7 @@ public class BookingServiceImpl implements BookingService {
 		int tempRowSum = 0;
 		boolean flagSeatFound = false;
 		int i = 1;
-		int[] rowRemainingSeats = new int[12+1];
+		int[] rowRemainingSeats = new int[noOfrows+1]; //change
 		int rowIndex = 1;
 		int totalRemainingSeats = 0;
 		for (i = 1; i < seatMatrix.length; i++) {
@@ -57,8 +82,8 @@ public class BookingServiceImpl implements BookingService {
 			tempRowSum = tempRowSum + seatMatrix[i];
 			if(seatMatrix[i]==0)
 				totalRemainingSeats++;
-			if (i%7==0 && i>0) {
-				tempRowSum = 7 - tempRowSum;
+			if (i%seatsInArow==0 && i>0) { //change
+				tempRowSum = seatsInArow - tempRowSum; //change
 				rowRemainingSeats[rowIndex] = tempRowSum;
 				rowIndex++;
 //				System.out.print(" ->"+tempRowSum);
@@ -68,7 +93,7 @@ public class BookingServiceImpl implements BookingService {
 			
 		}
 		
-		rowRemainingSeats[rowIndex] = 3 - tempRowSum;
+		rowRemainingSeats[rowIndex] = seatsInLastRow - tempRowSum; //change
 		
 //		System.out.println("totalRemainingSeats "+totalRemainingSeats);
 		if (totalRemainingSeats<requiredSeats) {
@@ -101,10 +126,10 @@ public class BookingServiceImpl implements BookingService {
 //				System.out.println("minDistanceRow " +minDistanceRow  + " with seats " + rowRemainingSeats[minDistanceRow] +" remaining seats " + (requiredSeats - rowRemainingSeats[minDistanceRow]));
 				remainingSeats = requiredSeats - rowRemainingSeats[minDistanceRow];
 //					System.out.println("selected row: " + minDistanceRow + " seat: " + (minDistanceRow*7-6));
-					i = minDistanceRow*7-6;
-					int end = minDistanceRow*7;
-					if (end > 80)
-						end = 80;
+					i = minDistanceRow*(seatsInArow)-(seatsInArow-1); //change
+					int end = minDistanceRow*(seatsInArow); //change
+					if (end > totalSeats) //change
+						end = totalSeats; //change
 					while(requiredSeats!=0) {
 						if (seatMatrix[i]==0) {
 							allocatedSeats.add(i);
@@ -136,7 +161,7 @@ public class BookingServiceImpl implements BookingService {
 				}
 				if (remainingSeats<=0)
 					break;
-				if (endSeat + distance < 81 && seatMatrix[endSeat + distance]==0) {
+				if (endSeat + distance < (totalSeats+1) && seatMatrix[endSeat + distance]==0) {
 //					System.out.println(endSeat + distance + " " +seatMatrix[endSeat + distance]);
 					allocatedSeats.add(endSeat + distance);
 					remainingSeats--;
